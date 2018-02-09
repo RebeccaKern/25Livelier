@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Location address:</strong>
+  <%= @room.location_address %>
+</p>
+
+<p>
+  <strong>Max capacity:</strong>
+  <%= @room.max_capacity %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @room.type %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @room.description %>
+</p>
+
+<p>
+  <strong>Building:</strong>
+  <%= @room.building %>
+</p>
+
+<%= link_to 'Edit', edit_room_path(@room) %> |
+<%= link_to 'Back', rooms_path %>

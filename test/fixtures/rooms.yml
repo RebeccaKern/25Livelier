@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  location_address: MyString
+  max_capacity: 1
+  type: 
+  description: MyString
+  building: one
+
+two:
+  location_address: MyString
+  max_capacity: 1
+  type: 
+  description: MyString
+  building: two
