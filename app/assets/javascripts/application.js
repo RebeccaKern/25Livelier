@@ -13,7 +13,7 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery
-//= require materialize
+//= require materialize-sprockets
 //= require_tree .
 
 var filter_dict = {}

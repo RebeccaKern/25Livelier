@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :organizations, through: :leadership
 
   validate :has_andrew_id, on: :create
+  validate :set_params_from_andrew, on: :create
   validate :user_is_not_a_duplicate, on: :create
 
   def name
@@ -31,6 +32,15 @@ class User < ApplicationRecord
   end
 
   private
+
+  def set_params_from_andrew
+    json = JSON.parse(open("https://apis.scottylabs.org/directory/v1/andrewID/#{self.andrew_id}").read)
+    if json["affiliation"] == "Alumni"
+      errors.add(:user, "is an alumni and should not have the ability to create an account.")
+    end
+    self.first_name = json["first_name"]
+    self.last_name = json["last_name"]
+  end
 
   def has_andrew_id
     begin
