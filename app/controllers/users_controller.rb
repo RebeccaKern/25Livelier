@@ -31,7 +31,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      if @user.role == "manager"
+      if @user.role == "manager" || @user.role == "admin"
         Leadership.create(user_id: @user.id, organization_id: 1)
       end
       session[:user_id] = @user.id

@@ -18,6 +18,13 @@ namespace :db do
     matt.password_confirmation = "secret"
     matt.role = "general"
     matt.save!
+
+    becca = User.new
+    becca.andrew_id = "rkern"
+    becca.password = "secret"
+    becca.password_confirmation = "secret"
+    becca.role = "admin"
+    becca.save!
     # admin = User.new
     # admin.andrew_id = "rkern"
     # admin.password = "secret"
