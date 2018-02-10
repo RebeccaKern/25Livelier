@@ -30,4 +30,10 @@
 
 <br>
 
+<span class="paginate">
+  <%= will_paginate @event, :previous_label => "Previous&nbsp;", :next_label => "&nbsp;Next", :param_name => 'events' %>
+</span>
+
 <%= link_to 'New Event', new_event_path %>
+
+
