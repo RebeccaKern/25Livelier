@@ -12,8 +12,8 @@ class User < ApplicationRecord
     "#{self.andrew_id}@andrew.cmu.edu"
   end
 
-  def self.authenticate(email,password)
-    find_by_email(email).try(:authenticate, password)
+  def self.authenticate(andrew_id,password)
+    find_by_andrew_id(andrew_id).try(:authenticate, password)
   end
 
   ROLES = [['Administrator', :admin],['Organization Leader', :manager]]
