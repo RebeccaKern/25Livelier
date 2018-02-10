@@ -7,11 +7,11 @@ class Ability
     if user.role? :admin
         can :manage, :all
     elsif user.role? :manager
-        can :update, Band do |band|  
-          band.id == user.band_id
+        can :update, Event do |event|  
+          event.user_id == user.id
         end
-        can :destroy, Band do |band|  
-          band.id == user.band_id
+        can :destroy, Event do |event|  
+          event.user_id == user.id
         end
     elsif user.role? :member
         can :update, Band do |band|  
