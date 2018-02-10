@@ -4,7 +4,7 @@ namespace :db do
   # executing 'rake db:populate' will cause this script to run
   task :populate => :environment do
     # Drop the old db and recreate from scratch
-    # Rake::Task['db:drop'].invoke
+    Rake::Task['db:drop'].invoke
     Rake::Task['db:create'].invoke
     #Invoke rake db:migrate
     Rake::Task['db:migrate'].invoke
