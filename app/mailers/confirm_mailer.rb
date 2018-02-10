@@ -1,0 +1,2 @@
+class ConfirmMailer < ApplicationMailer
+end
