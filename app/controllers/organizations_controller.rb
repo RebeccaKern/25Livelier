@@ -1,6 +1,7 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
-
+  authorize_resource
+  
   # GET /organizations
   # GET /organizations.json
   def index
