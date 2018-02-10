@@ -7,5 +7,5 @@ class Event < ApplicationRecord
   scope :for_user, ->(user_id) { where("user_id = ?", user_id) }
   scope :upcoming, -> { where('date >= ?', Date.current) }
   scope :past, -> { where('date < ?', Date.current) }
-
+  scope :chronological, -> { order('start_time')}
 end
