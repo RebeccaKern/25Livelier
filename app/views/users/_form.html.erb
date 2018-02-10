@@ -21,12 +21,16 @@
     <%= form.text_field :password %>
   </div>
 
-  <div class="field">
-    <%= form.label :role %>
-    <%= form.text_field :role, id: :user_role %>
-  </div>
+  <% if current_user && current_user.role?(:admin)%>
+    <div class="field">
+      <%= form.label :role %>
+      <%= form.text_field :role, id: :user_role %>
+    </div>
+  <% end %>
 
-  <div class="actions">
+  
+
+  <div class="actions btn waves-effect waves-light">
     <%= form.submit %>
   </div>
 <% end %>
