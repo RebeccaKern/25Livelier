@@ -86,6 +86,24 @@ namespace :db do
     s.start_time = Time.now
     s.end_time = Time.now + 1.hour
     s.save!
+    
+    for i in 1..30
+        m = Event.new
+        m.name = "Sample Event #{i}"
+        m.description = "This is an event I am making..."
+        m.room_id = Random.rand(21) + 1
+        m.number_attending = Random.rand(Room.find(m.room_id).max_capacity) + 1
+        m.user_id = Random.rand(9) + 1
+        m.organization_id = m.user_id + 1
+        m.date = Date.current + (i).days - 15
+        m.start_time = Time.new(1,2,1, Random.rand(20), 0, 0, "+00:00")
+        m.end_time = m.start_time + 3.hour
+        m.save!
+    end
+    
+    # for i in 0..5
+    #   puts "Value of local variable is #{i}"
+    # end
 
     #["BPH 222C", 26], , 
     #,     ["BPH 246A", 22]["BPH A-60N", 18], ["BPH 150", 22]]
