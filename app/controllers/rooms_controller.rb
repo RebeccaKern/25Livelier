@@ -11,6 +11,8 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    @upcoming_events = Event.for_room(@room.id).upcoming
+    @past_events = Event.for_room(@room.id).past
   end
 
   # GET /rooms/new
