@@ -49,7 +49,7 @@ class User < ApplicationRecord
         self.role = "manager"
         #@o = Organization.where(:name => "admin_privileges")
         #puts User.all.size
-        Leadership.create(user_id: User.all.size, organization_id: 1)
+        
       puts self.role
       elsif self.role == "" || self.role.nil?
         self.role = "general"

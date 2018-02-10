@@ -31,6 +31,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      if @user.role == "manager"
+        Leadership.create(user_id: @user.id, organization_id: 1)
+      end
       session[:user_id] = @user.id
       redirect_to home_path, :notice => 'User was successfully created.'
     else
