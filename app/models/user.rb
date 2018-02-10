@@ -2,8 +2,9 @@ class User < ApplicationRecord
   require 'open-uri'
   has_secure_password
 
+  has_many :leaderships
   has_many :events
-  has_many :organizations, through: :leadership
+  has_many :organizations, through: :leaderships
 
   validate :has_andrew_id, on: :create
   validate :set_params_from_andrew, on: :create
