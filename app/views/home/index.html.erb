@@ -31,10 +31,10 @@ body, html {
 <div>
   <div class="row">  
     <h1 class="center-text">Let's Make CMU <span class="accent-color">Livelier</span></h1>  
-    
       <div class="center-text">
+        <% if !(logged_in?) %>
         <!-- <div class="card-content"> -->
-          <h5><b>Imagine a world where it was actually possible to reserve a space.</b></h5>
+          <h5><b>Imagine a world where it is actually possible to reserve a space.</b></h5>
           <p>Log In or Sign Up below to join the movement</p>
         </div>
       <!-- </div> -->
@@ -42,6 +42,12 @@ body, html {
         <a class="waves-effect waves-accent waves-light btn accent-color-bg" href="/login">Log In</a>
         <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/signup">Register</a>        
       </div>
+      <% else %>
+      <div class="center-text">
+        <a class="waves-effect waves-accent waves-light btn accent-color-bg" href="/events/new">Make an Event</a>
+        <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/users">View Your Events</a>        
+      </div>      
+      <% end %>
     </div>
   </div>
 </div>
