@@ -74,6 +74,19 @@ namespace :db do
         r.save!
     end
 
+    
+    s = Event.new
+    s.name = "Becca's Event"
+    s.number_attending = 15
+    s.description = "example text"
+    s.room_id = 1
+    s.user_id = 3
+    s.organization_id = 2
+    s.date = Date.current + 5.days
+    s.start_time = Time.now
+    s.end_time = Time.now + 1.hour
+    s.save!
+
     #["BPH 222C", 26], , 
     #,     ["BPH 246A", 22]["BPH A-60N", 18], ["BPH 150", 22]]
     # t.string "location_address"
