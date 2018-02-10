@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20180210013212) do
   create_table "rooms", force: :cascade do |t|
     t.string "location_address"
     t.integer "max_capacity"
-    t.string "type"
+    t.string "room_type"
     t.string "description"
     t.boolean "reservable", default: true
     t.integer "building_id"

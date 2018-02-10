@@ -13,7 +13,7 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery
-//= require materialize
+//= require materialize-sprockets
 //= require_tree .
 
 $(document).ready(function(){
