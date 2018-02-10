@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update]
+
   # GET /users
   # GET /users.json
   def index
@@ -25,6 +26,7 @@ class UsersController < ApplicationController
   def create
 
     @user = User.new(user_params)
+
     if @user.save
       session[:user_id] = @user.id
       redirect_to home_path, :notice => 'User was successfully created.'
