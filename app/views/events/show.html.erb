@@ -1,16 +1,33 @@
 <p id="notice"><%= notice %></p>
-
-<h2>Your Event is <span class="accent-color">Created</span></h2>
-
-<h4>We look forward to having <%= @event.organization.name %> in <%= @event.room.full_name %> on <%= @event.date.strftime('%B %d, %Y') %> from <%= @event.start_time.strftime('%k:%M %p') %> to <%= @event.end_time.strftime('%k:%M %p') %> for <%= @event.description %>. </h4>
-
-<h5><b><%= @event.user.name %></b> created this event on <%= Time.now.strftime('%B %d, %Y') %> at <%= Time.now.strftime('%k:%M %p') %></h5>
-
+<h1><%= @event.name %></h1>
 <p>
-  <strong>Number attending:</strong>
-  <%= @event.number_attending %>
+  <strong>Room:</strong>
+  <%= @event.room.full_name() %>
+</p>
+<p>
+  <strong>Date:</strong>
+  <%= @event.date.strftime('%m/%d/%Y') %>
+</p>
+<p>
+  <strong>Start Time:</strong>
+  <%= @event.start_time.strftime('%l:%M %P') %>
+</p>
+<p>
+  <strong>End Time:</strong>
+  <%= @event.end_time.strftime('%l:%M %P') %>
+</p>
+<p>
+  <strong>Organization:</strong>
+  <%= @event.organization.name %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @event.description %>
+</p>
+<p>
+  <% if current_user.role?(:admin) || current_user.id == @event.user_id %>
+    <td><%= link_to 'Edit', edit_event_path(@event), :class=>"btn waves-effect waves-light" %></td>
+  <% end %>
 </p>
 
-<p><i>A confirmation email has been sent to <%= @event.user.email %></i></p>
 
-<%= link_to 'Edit', edit_event_path(@event), :class=>"btn waves-effect waves-light center-align" %>
