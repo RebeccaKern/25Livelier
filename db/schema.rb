@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20180210135921) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "buildings", force: :cascade do |t|
     t.string "name"
     t.float "latitude"
@@ -25,9 +28,9 @@ ActiveRecord::Schema.define(version: 20180210135921) do
     t.integer "number_attending"
     t.string "description"
     t.integer "group_tag"
-    t.integer "room_id"
-    t.integer "user_id"
-    t.integer "organization_id"
+    t.bigint "room_id"
+    t.bigint "user_id"
+    t.bigint "organization_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "date"
@@ -39,8 +42,8 @@ ActiveRecord::Schema.define(version: 20180210135921) do
   end
 
   create_table "leaderships", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "organization_id"
+    t.bigint "user_id"
+    t.bigint "organization_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_leaderships_on_organization_id"
@@ -60,7 +63,7 @@ ActiveRecord::Schema.define(version: 20180210135921) do
     t.string "room_type"
     t.string "description"
     t.boolean "reservable", default: true
-    t.integer "building_id"
+    t.bigint "building_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["building_id"], name: "index_rooms_on_building_id"
@@ -77,4 +80,10 @@ ActiveRecord::Schema.define(version: 20180210135921) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "events", "organizations"
+  add_foreign_key "events", "rooms"
+  add_foreign_key "events", "users"
+  add_foreign_key "leaderships", "organizations"
+  add_foreign_key "leaderships", "users"
+  add_foreign_key "rooms", "buildings"
 end
