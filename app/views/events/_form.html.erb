@@ -7,12 +7,18 @@ var filter = function(k, v){
 
 var set_selected = function(tr, value){
   console.log(tr[0])
-  tr[0].style.backgroundColor = '#FF5252';
   if (selected_row){
     selected_row.style.backgroundColor = 'inherit';
   }
+  tr[0].style.backgroundColor = '#FF5252';
   selected_row = tr[0];
   $("#room_id").val(value);
+}
+
+var reset_selected = function(){
+  console.log('reset');
+  console.log(selected_row);
+  $(selected_row).click();
 }
 
 var show_building_rooms = function(building_id){
@@ -86,6 +92,7 @@ var reset_table = function(){
   }
   new_table += "</tbody></table></div>"
   $(room_table).replaceWith(new_table);
+  reset_selected();
 }
 </script>
 
