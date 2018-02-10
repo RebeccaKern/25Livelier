@@ -46,9 +46,12 @@ class User < ApplicationRecord
     self.last_name = json["last_name"]
     if json["affiliation"] == "Faculty" || json["affiliation"] == "Staff"
       self.role = "manager"
+      #@o = Organization.where(:name => "admin_privileges")
+      #puts User.all.size
+      Leadership.create(user_id: User.all.size, organization_id: 1)
     end
     puts self.role
-    if self.role == ""
+    if self.role == "" || self.role.nil?
       self.role = "general"
     end
   end

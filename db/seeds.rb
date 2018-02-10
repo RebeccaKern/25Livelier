@@ -8,6 +8,12 @@
 
 require 'csv'
 
+# Step 0: Create admin org
+    org = Organization.new
+    org.name = "admin_privileges"
+    org.description = "available for staff, faculty, and site admins"
+    org.save!
+
 csv_text = File.read('org_primary.csv')
 csv = CSV.parse(csv_text, :headers => true)
 orgAffiliates = {}
