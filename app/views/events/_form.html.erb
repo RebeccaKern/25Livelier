@@ -1,12 +1,14 @@
 <script type="text/javascript">
 var filter = function(k, v){
   filter_dict[k] = v;
-  console.log(filter_dict);
+  reset_table();
 }
 
 var filter_all_rooms = function(all_rooms){
-  if (filter_dict.num_ppl){
-    all_rooms = all_rooms.filter(room => room.capacity >= filter_dict.num_ppl);
+  if (filter_dict.event_number_attending){
+    console.log(filter_dict.event_number_attending);
+    all_rooms = all_rooms.filter(room => (room.max_capacity >= filter_dict.event_number_attending));
+    console.log(all_rooms);
   }
   if (filter_dict.building){
     all_rooms = all_rooms.filter(room => room.building == filter_dict.building);
@@ -14,18 +16,20 @@ var filter_all_rooms = function(all_rooms){
   if (filter_dict.building && filter_dict.room){
     all_rooms = all_rooms.filter(room => (room.location_address == filter_dict.room) && (room.building == filter_dict.building));
   }
+  return all_rooms;
 }
 
 var reset_table = function(){
   var room_table = document.getElementById('room_table');
-  var new_table = "<table class='striped'><thead><tr><th>Building</th><th>Room</th></tr></th>";
-  var all_rooms = <%= Room.all.map{|a| a.location_address} %>;
-  console.log(all_rooms);
-  for (elem in all_rooms){
-    console.log(elem);
-    new_table += "<tr>"+elem+"</tr>"
+  var new_table = "<div id='room_table'><table class='striped'><thead><tr><th>Building</th><th>Room</th><th>Capacity</th></tr></th><tbody>";
+  var all_rooms = <%= raw Room.all.map{|a| a.to_json(:include => :building)} %>;
+  all_rooms = all_rooms.map(room => JSON.parse(room));
+  all_rooms = filter_all_rooms(all_rooms);
+  for (var elem = 0; elem < all_rooms.length; elem++){
+    console.log(all_rooms[elem]);
+    new_table += "<tr><td>"+all_rooms[elem].building.name+"</td><td>"+all_rooms[elem].location_address+"</td><td>"+all_rooms[elem].max_capacity+"</td></tr>";
   }
-  new_table += "</table>"
+  new_table += "</tbody></table></div>"
   $(room_table).replaceWith(new_table);
 }
 </script>
@@ -111,15 +115,19 @@ var reset_table = function(){
           <tr>
             <th>Building</th>
             <th>Room</th>
+            <th>Capacity</th>
           </tr>
         </thead>
-      </table>
+      <tbody>
       <% for room in Room.all %>
         <tr>
-          <td><%= room.building %></td>
+          <td><%= room.building.name %></td>
           <td><%= room.location_address %></td>
+          <td><%= room.max_capacity %></td>
         </tr>
-      <% end %>
+      <% end %>        
+      </tbody>
+    </table>
     </div>
   </div>
 </div>
