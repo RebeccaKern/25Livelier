@@ -12,9 +12,6 @@ class UsersController < ApplicationController
     @upcoming_events = Event.for_user(@user.id).upcoming
     @past_events = Event.for_user(@user.id).past
     @organizations = Organization.by_user(@user.id)
-    puts "what the heck"
-
-    puts @organizations
   end
 
   # GET /users/new
