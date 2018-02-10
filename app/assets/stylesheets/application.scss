@@ -41,6 +41,13 @@ $divider-color:        #BDBDBD;
   background-color:inherit;
 }
 
+.btn{
+  background-color: $primary-color
+}
+.btn:hover {
+  background-color: $accent-color
+}
+
 .bg-img
 {
     width: 100%;

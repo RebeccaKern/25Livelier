@@ -96,9 +96,9 @@ var reset_table = function(){
       <%= form.number_field :group_tag, id: :event_group_tag %>
     </div>
 
-    <div class="field">
+    <div class="field col s6">
       <%= form.label :organization_id %>
-      <%= form.text_field :organization_id, id: :event_organization_id %>
+      <%= form.collection_select :organization_id, Organization.by_user(current_user.id).map, :id, :name, :prompt => "Select Organization..." %>
     </div>
 
     <div class="actions">

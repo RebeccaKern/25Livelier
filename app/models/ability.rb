@@ -7,6 +7,10 @@ class Ability
     if user.role? :admin
         can :manage, :all
     elsif user.role? :manager
+        can :create, Event
+        #Event do |event|
+        #     puts "test"
+        # end
         can :update, Event do |event|  
           event.user_id == user.id
         end

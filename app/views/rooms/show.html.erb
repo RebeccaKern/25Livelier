@@ -12,7 +12,7 @@
 
 <p>
   <strong>Type:</strong>
-  <%= @room.type %>
+  <%= @room.room_type %>
 </p>
 
 <p>
@@ -24,6 +24,6 @@
   <strong>Building:</strong>
   <%= @room.building %>
 </p>
-
+<%= link_to 'Destroy', @room, method: :delete, data: { confirm: 'Are you sure?' } %>
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>
