@@ -15,8 +15,9 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    Materialize.toast("Go away or I shall taunt you a second time.", 3000, 'red')
-    redirect_to home_path
+    redirect_to home_path, notice: "Go away or I shall taunt you a second time."
+    #Materialize.toast("Go away or I shall taunt you a second time.", 3000, 'red')
+    
   end
 end
 
