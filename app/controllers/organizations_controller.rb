@@ -5,7 +5,7 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    @organizations = Organization.all
+    @organizations = Organization.all.alphabetical.paginate(:page => params[:users]).per_page(20)
   end
 
   # GET /organizations/1

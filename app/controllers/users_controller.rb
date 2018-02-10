@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all.alphabetical
+    @users = User.all.alphabetical.paginate(:page => params[:users]).per_page(10)
   end
 
   # GET /users/1
