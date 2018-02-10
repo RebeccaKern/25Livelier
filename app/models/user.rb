@@ -10,6 +10,8 @@ class User < ApplicationRecord
   validate :set_params_from_andrew, on: :create
   validate :user_is_not_a_duplicate, on: :create
 
+  scope :alphabetical, -> { order('andrew_id') }
+
   def name
     "#{self.first_name} #{self.last_name}"
   end
