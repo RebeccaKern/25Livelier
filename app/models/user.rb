@@ -1,8 +1,12 @@
 class User < ApplicationRecord
+  require 'open-uri'
   has_secure_password
 
   has_many :events
   has_many :organizations, through: :leadership
+
+  validate :has_andrew_id, on: :create
+  validate :user_is_not_a_duplicate, on: :create
 
   def name
     "#{self.first_name} #{self.last_name}"
@@ -20,6 +24,26 @@ class User < ApplicationRecord
   def role?(authorized_role)
     return false if role.nil?
     role.to_sym == authorized_role
+  end
+
+  def already_exists?
+    User.where(andrew_id: self.andrew_id).size == 1
+  end
+
+  private
+
+  def has_andrew_id
+    begin
+      open("https://apis.scottylabs.org/directory/v1/andrewID/#{self.andrew_id}")
+    rescue
+      errors.add(:user, "does not currently have an andrew_id at CMU")
+    end
+  end
+
+  def user_is_not_a_duplicate
+    if self.already_exists?
+      errors.add(:andrew_id, "already exists for a current user")
+    end
   end
 
 end
