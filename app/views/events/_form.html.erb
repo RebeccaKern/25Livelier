@@ -60,6 +60,33 @@ var update_room = function(room){
   reset_table();
 }
 
+var time_conflicts = function(t_array){
+  var start_hour = parseInt(filter_dict.start_time.slice(0, 2)) + (12 * (filter_dict.start_time.slice(5, 7) === "PM"));
+  if (start_hour === 24){ start_hour = 12; }
+  var start_min = parseInt(filter_dict.start_time.slice(3, 5));
+  var end_hour = parseInt(filter_dict.end_time.slice(0, 2)) + (12 * (filter_dict.end_time.slice(5, 7) === "PM"));
+  var end_min = parseInt(filter_dict.end_time.slice(3, 5));
+  if (t_array[1] < start_hour || (t_array[1] == start_hour && t_array[2] <= start_min)){
+    if (t_array[3] > end_hour || (t_array[3] == end_hour && t_array[4] >= end_min))
+      return true;
+  }
+  if (t_array[1] > start_hour || (t_array[1] == start_hour && t_array[2] >= start_min)){
+    if (t_array[1] < end_hour || (t_array[1] == start_hour && t_array[2] <= end_min)){
+      return true;
+    }
+  }
+  if (t_array[3] < end_hour || (t_array[3] == end_hour && t_array[4] <= end_min)){
+    if (t_array[3] > start_hour || (t_array[3] == start_hour && t_array[4] >= start_min)){
+      return true;
+    }
+  }
+  return false;
+}
+
+var dates_equal = function(d1, d2){
+  return (d1.getYear() == d2.getYear()) && (d1.getMonth() == d2.getMonth()) && (d1.getDay() == d2.getDay())
+}
+
 var filter_all_rooms = function(all_rooms){
   if (filter_dict.event_number_attending){
     console.log(filter_dict.event_number_attending);
@@ -73,6 +100,24 @@ var filter_all_rooms = function(all_rooms){
     console.log("both");
     all_rooms = all_rooms.filter(room => (room.id == filter_dict.room_id) && (room.building.name == filter_dict.building));
   }
+  if (filter_dict.date && filter_dict.start_time && filter_dict.end_time){
+    console.log('date')
+    var tmp_rooms = all_rooms.map(room => room.events_for_room.map(e => [e.date, new Date(e.start_time).getHours(), new Date(e.start_time).getMinutes(), new Date(e.end_time).getHours(), new Date(e.end_time).getMinutes(), e.id]));
+    var blacklist = [];
+    for (var i = 0; i < tmp_rooms.length; i++){
+      for (var k = 0; k < tmp_rooms[i].length; k++){
+        var mod = new Date(tmp_rooms[i][k][0]);
+        mod.setDate(mod.getDate() + 1);
+        var cmp = new Date(filter_dict.date);
+        if (dates_equal(mod, cmp) && time_conflicts(tmp_rooms[i][k])){
+          blacklist.push(tmp_rooms[i][k][5]);
+        }
+      }
+    }
+    console.log(blacklist);
+    all_rooms = all_rooms.filter(room => !(blacklist.includes(room.id)))
+  }
+
   return all_rooms;
 }
 
