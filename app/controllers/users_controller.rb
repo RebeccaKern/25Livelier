@@ -1,14 +1,18 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :show]
+  authorize_resource
   # GET /users
   # GET /users.json
   def index
-    @users = User.all.alphabetical.paginate(:page => params[:users]).per_page(10)
+    @users = User.all.alphabetical_last.paginate(:page => params[:users]).per_page(10)
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
+    @upcoming_events = Event.for_user(@user.id).upcoming
+    @past_events = Event.for_user(@user.id).past
+    @organizations = Organization.by_user(@user.id)
   end
 
   # GET /users/new

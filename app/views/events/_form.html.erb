@@ -1,7 +1,18 @@
 <script type="text/javascript">
+var selected_row;
 var filter = function(k, v){
   filter_dict[k] = v;
   reset_table();
+}
+
+var set_selected = function(tr, value){
+  console.log(tr[0])
+  tr[0].style.backgroundColor = '#FF5252';
+  if (selected_row){
+    selected_row.style.backgroundColor = 'inherit';
+  }
+  selected_row = tr[0];
+  $("#room_id").val(value);
 }
 
 var show_building_rooms = function(building_id){
@@ -71,7 +82,7 @@ var reset_table = function(){
   all_rooms = filter_all_rooms(all_rooms);
   for (var elem = 0; elem < all_rooms.length; elem++){
     console.log(all_rooms[elem]);
-    new_table += "<tr><td>"+all_rooms[elem].building.name+"</td><td>"+all_rooms[elem].location_address+"</td><td>"+all_rooms[elem].max_capacity+"</td></tr>";
+    new_table += `<tr onclick='javascript: set_selected($(this), ${all_rooms[elem].id})'><td>`+all_rooms[elem].building.name+"</td><td>"+all_rooms[elem].location_address+"</td><td>"+all_rooms[elem].max_capacity+"</td></tr>";
   }
   new_table += "</tbody></table></div>"
   $(room_table).replaceWith(new_table);
@@ -94,6 +105,24 @@ var reset_table = function(){
     <% end %>
 
     <%= form.hidden_field :user_id, value: current_user.id %>
+    <%= form.hidden_field :room_id, {id: "room_id"} %>
+    <%= form.hidden_field :organization_id, {id: "organization_id"} %>
+
+    <div class="input-field">
+      <select id='orgs' onchange="javascript: $('#organization_id').val($('#orgs').val());">
+        <option value="" disabled selected>Choose an Organization</option>
+      <% for org in current_user.organizations %>
+        <option value='<%=org.id%>'><%= org.name %></option>
+      <% end %>
+      </select>
+      <label>Choose an Organization</label>
+    </div>
+
+
+    <div class="input-field">
+      <%= form.label 'Event Name' %>
+      <%= form.text_field :name, id: :event_name, :onkeyup=>"javascript: filter('event_name', $('#event_name').val());" %>
+    </div>
 
     <div class="input-field">
       <select id="building_select" onchange="javascript: show_building_rooms($('#building_select').val())">
@@ -146,43 +175,32 @@ var reset_table = function(){
     </div>
 
     <div class="input-field">
-      <%= form.label 'Event Name' %>
-      <%= form.text_field :name, id: :event_name, :onkeyup=>"javascript: filter('event_name', $('#event_name').val());" %>
-    </div>
-
-    <div class="input-field">
       <%= form.label :number_attending %>
       <%= form.number_field :number_attending, id: :event_number_attending, :onkeyup=>"javascript: filter('event_number_attending', $('#event_number_attending').val());" %>
     </div>
 
+    <hr/>
+
     <div class="input-field">
       <%= form.label :date %>
-      <%= form.date_field :date, id: :event_date, :onChange=>"javascript: filter('date', $('#event_date').val());" %>
+      <%= form.text_field :date, prompt: "Event Date", id: :event_date, class: "datepicker", :value => (form.object.date.strftime('%B %d, %Y') if form.object.date != nil), :onChange=>"javascript: filter('date', $('#event_date').val());" %>
     </div>
 
     <div class="input-field">
       <%= form.label :start_time %>
-      <%= form.time_field :start_time, id: :event_start_time %>
+      <%= form.text_field :start_time, id: :event_start_time, class: "timepicker", :onChange=>"javascript: filter('start_time', $('#event_start_time').val());" %>
     </div>
 
     <div class="input-field">
       <%= form.label :end_time %>
-      <%= form.time_field :end_time, id: :event_end_time %>
+      <%= form.text_field :end_time, id: :event_end_time, class: "timepicker", :onChange=>"javascript: filter('end_time', $('#event_end_time').val());" %>    
     </div>
+
+    <hr/>
 
     <div class="input-field">
       <%= form.label :description %>
       <%= form.text_field :description, id: :event_description %>
-    </div>
-
-    <div class="input-field">
-      <%= form.label :group_tag %>
-      <%= form.number_field :group_tag, id: :event_group_tag %>
-    </div>
-
-    <div class="input-field">
-      <%= form.label :organization_id %>
-      <%= form.collection_select :organization_id, Organization.by_user(current_user.id).map, :id, :name, :prompt => "Select Organization..." %>
     </div>
 
     <div class="actions">
@@ -204,7 +222,7 @@ var reset_table = function(){
           </thead>
         <tbody>
         <% for room in Room.all %>
-          <tr>
+          <tr onclick="javascript: set_selected($(this), <%= room.id %>)">
             <td><%= room.building.name %></td>
             <td><%= room.location_address %></td>
             <td><%= room.max_capacity %></td>

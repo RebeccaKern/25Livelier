@@ -42,10 +42,12 @@ body, html {
         <a class="waves-effect waves-accent waves-light btn accent-color-bg" href="/login">Log In</a>
         <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/signup">Register</a>        
       </div>
+      <% elsif current_user.role?(:general) %>
+         <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/events">View Events</a>      
       <% else %>
       <div class="center-text">
         <a class="waves-effect waves-accent waves-light btn accent-color-bg" href="/events/new">Make an Event</a>
-        <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/users">View Your Events</a>        
+        <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/users/<%= current_user.id %>">View Your Events</a>        
       </div>      
       <% end %>
     </div>

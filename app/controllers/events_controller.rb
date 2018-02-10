@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    @events = Event.all.chronological.paginate(:page => params[:users]).per_page(10)
   end
 
   # GET /events/1
@@ -29,6 +29,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
+        ConfirmMailer.new_event_msg(@event).deliver
         format.html { redirect_to @event, notice: 'Event was successfully created.' }
         format.json { render :show, status: :created, location: @event }
       else
@@ -43,6 +44,7 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
+        ConfirmMailer.new_event_msg(@event).deliver
         format.html { redirect_to @event, notice: 'Event was successfully updated.' }
         format.json { render :show, status: :ok, location: @event }
       else
@@ -70,6 +72,6 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:name, :number_attending, :description, :group_tag, :room_id, :user_id, :organization_id)
+      params.require(:event).permit(:name, :number_attending, :description, :group_tag, :room_id, :user_id, :organization_id, :date, :start_time, :end_time)
     end
 end
