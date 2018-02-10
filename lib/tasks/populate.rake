@@ -103,13 +103,9 @@ namespace :db do
         m.organization_id = m.user_id + 1
         m.date = Date.current + (i).days - 15
         m.start_time = Time.new(1,2,1, Random.rand(20), 0, 0, "+00:00")
-        m.end_time = m.start_time + 3.hour
+        m.end_time = m.start_time + (Random.rand(3) + 1).hours
         m.save!
     end
-    
-    # for i in 0..5
-    #   puts "Value of local variable is #{i}"
-    # end
 
     #["BPH 222C", 26], , 
     #,     ["BPH 246A", 22]["BPH A-60N", 18], ["BPH 150", 22]]

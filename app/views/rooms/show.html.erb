@@ -17,6 +17,10 @@
   <%= @room.room_type %>
 </p>
 
+
+<% if @upcoming_events.empty? %>
+  <h5>This room does not have any upcoming events at the moment.</h5>
+<% else %>
 <h3>Upcoming Events</h3>
 
   <table>
@@ -43,7 +47,11 @@
     <% end %>
   </tbody>
 </table>
+<% end %>
 
+<% if @past_events.empty? %>
+  <h5>This room has never been used for an event.</h5>
+<% else %>
   <h3>Past Events</h3>
 
   <table>
@@ -70,6 +78,7 @@
     <% end %>
   </tbody>
 </table>
+<%end%>
 
 <p>
   <strong>Description:</strong>
