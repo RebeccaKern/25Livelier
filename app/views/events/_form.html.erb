@@ -1,52 +1,125 @@
-<%= form_with(model: event, local: true) do |form| %>
-  <% if event.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+<script type="text/javascript">
+var filter = function(k, v){
+  filter_dict[k] = v;
+  console.log(filter_dict);
+}
 
-      <ul>
-      <% event.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+var filter_all_rooms = function(all_rooms){
+  if (filter_dict.num_ppl){
+    all_rooms = all_rooms.filter(room => room.capacity >= filter_dict.num_ppl);
+  }
+  if (filter_dict.building){
+    all_rooms = all_rooms.filter(room => room.building == filter_dict.building);
+  }
+  if (filter_dict.building && filter_dict.room){
+    all_rooms = all_rooms.filter(room => (room.location_address == filter_dict.room) && (room.building == filter_dict.building));
+  }
+}
+
+var reset_table = function(){
+  var room_table = document.getElementById('room_table');
+  var new_table = "<table class='striped'><thead><tr><th>Building</th><th>Room</th></tr></th>";
+  var all_rooms = <%= Room.all.map{|a| a.location_address} %>;
+  console.log(all_rooms);
+  for (elem in all_rooms){
+    console.log(elem);
+    new_table += "<tr>"+elem+"</tr>"
+  }
+  new_table += "</table>"
+  $(room_table).replaceWith(new_table);
+}
+</script>
+
+<div class="row">
+  <div class="col s5">
+  <%= form_with(model: event, local: true) do |form| %>
+    <% if event.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+        <ul>
+        <% event.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :user_id, value: current_user.id %>
+
+    <div class="field">
+      <%= form.label 'Building' %>
+      <%= form.collection_select :building, Building.alphabetical, :id, :name, {}, {:onChange=>"javascript: filter('event_number_attending', $('#event_number_attending').val());"} %>
+    </div>
+
+    <div class="field">
+      <%= form.label :room_id %>
+      <%= form.collection_select :room_id, Room.alphabetical, :id, :location_address, {}, {:onChange=>"javascript: filter('event_number_attending', $('#event_number_attending').val());"} %>
+    </div>
+
+    <div class="field">
+      <%= form.label 'Event Name' %>
+      <%= form.text_field :name, id: :event_name, :onkeyup=>"javascript: filter('event_name', $('#event_name').val());" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :number_attending %>
+      <%= form.number_field :number_attending, id: :event_number_attending, :onkeyup=>"javascript: filter('event_number_attending', $('#event_number_attending').val());" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :date %>
+      <%= form.date_field :date, id: :event_date %>
+    </div>
+
+    <div class="field">
+      <%= form.label :start_time %>
+      <%= form.time_field :start_time, id: :event_start_time %>
+    </div>
+
+    <div class="field">
+      <%= form.label :end_time %>
+      <%= form.time_field :end_time, id: :event_end_time %>
+    </div>
+
+    <div class="field">
+      <%= form.label :description %>
+      <%= form.text_field :description, id: :event_description %>
+    </div>
+
+    <div class="field">
+      <%= form.label :group_tag %>
+      <%= form.number_field :group_tag, id: :event_group_tag %>
+    </div>
+
+    <div class="field">
+      <%= form.label :organization_id %>
+      <%= form.text_field :organization_id, id: :event_organization_id %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :event_name %>
   </div>
 
-  <div class="field">
-    <%= form.label :number_attending %>
-    <%= form.number_field :number_attending, id: :event_number_attending %>
+  <div class="col s5">
+    <h4>Available Rooms</h4>
+    <div id="room_table">
+      <table class='striped'>
+        <thead>
+          <tr>
+            <th>Building</th>
+            <th>Room</th>
+          </tr>
+        </thead>
+      </table>
+      <% for room in Room.all %>
+        <tr>
+          <td><%= room.building %></td>
+          <td><%= room.location_address %></td>
+        </tr>
+      <% end %>
+    </div>
   </div>
-
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_field :description, id: :event_description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :group_tag %>
-    <%= form.number_field :group_tag, id: :event_group_tag %>
-  </div>
-
-  <div class="field">
-    <%= form.label :room_id %>
-    <%= form.text_field :room_id, id: :event_room_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :user_id %>
-    <%= form.text_field :user_id, id: :event_user_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :organization_id %>
-    <%= form.text_field :organization_id, id: :event_organization_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>

@@ -16,10 +16,12 @@
 //= require materialize
 //= require_tree .
 
+var filter_dict = {}
+
 $(document).ready(function(){
   $(".dropdown-button").dropdown({
     belowOrigin: true,
     hover: true
   });
   $('.parallax').parallax();
-})
+});
