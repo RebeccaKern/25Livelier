@@ -17,12 +17,11 @@ class Ability
         can :destroy, Event do |event|  
           event.user_id == user.id
         end
-    elsif user.role? :member
-        can :update, Band do |band|  
-          band.id == user.band_id
-        end
-    else
-        can :read, :all
+    elsif user.role? :general
+        can :read, Building
+        can :read, Room
+        can :read, Event
     end
   end
+
 end

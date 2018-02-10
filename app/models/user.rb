@@ -24,7 +24,7 @@ class User < ApplicationRecord
     find_by_andrew_id(andrew_id).try(:authenticate, password)
   end
 
-  ROLES = [['Administrator', :admin],['Organization Leader', :manager]]
+  ROLES = [['Administrator', :admin],['Organization Leader', :manager], ['CMU Affiliate', :general]]
   def role?(authorized_role)
     return false if role.nil?
     role.to_sym == authorized_role
@@ -43,6 +43,13 @@ class User < ApplicationRecord
     end
     self.first_name = json["first_name"]
     self.last_name = json["last_name"]
+    if json["affiliation"] == "Faculty" || json["affiliation"] == "Staff"
+      self.role = "manager"
+    end
+    puts self.role
+    if self.role == ""
+      self.role = "general"
+    end
   end
 
   def has_andrew_id

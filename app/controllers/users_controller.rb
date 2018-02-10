@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :show]
+  authorize_resource
   # GET /users
   # GET /users.json
   def index
