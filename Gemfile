@@ -62,7 +62,7 @@ group :development do
 end
 
 group :test, :production do
-    gem 'pg'
+    gem "pg", "~> 0.18"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
