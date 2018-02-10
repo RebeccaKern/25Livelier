@@ -11,6 +11,7 @@ class User < ApplicationRecord
   validate :user_is_not_a_duplicate, on: :create
 
   scope :alphabetical, -> { order('andrew_id') }
+  scope :alphabetical_last, -> { order('last_name') }
 
   def name
     "#{self.first_name} #{self.last_name}"
