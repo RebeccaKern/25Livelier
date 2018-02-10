@@ -11,15 +11,99 @@ img {
 <img src="https://www.w3schools.com/howto/img_avatar.png" class="circle responsive-img"></img>
 <h2 class="center-text"><%= @user.name %></h2>
 <h4 class="center-text"><i>AndrewID: <%= @user.andrew_id %></i></h4>
-<p>
-  <strong>Andrew:</strong>
-  <%= @user.andrew_id %>
-</p>
 
+
+<% if @organizations.empty? %>
+  <h5>You don't have admin privileges for any current organizations.</h5>
+<% else %>
 <p>
   <strong>Role:</strong>
   <%= @user.role %>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
+<h3>Organizations</h3>
+
+  <table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @organizations.each do |org| %>
+      <tr>
+        <td><%= link_to org.name, org %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+<% end %>
+
+
+<% if @upcoming_events.empty? %>
+  <h5>You don't have any upcoming events at the moment.</h5>
+<% else %>
+<h3>Upcoming Events</h3>
+
+  <table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>Date</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Organization</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @upcoming_events.each do |event| %>
+      <tr>
+        <td><%= link_to event.name, event %></td>
+        <td><%= event.date.strftime("%m/%d/%y") %></td>
+        <td><%= event.start_time.strftime("%I:%M %p") %></td>
+        <td><%= event.end_time.strftime("%I:%M %p") %></td>
+        <td><%= event.organization.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <% end %>
+
+</table>
+
+
+  
+<% if @past_events.empty? == false %>
+  <h3>Past Events</h3>
+
+  <table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>Date</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Organization</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @past_events.each do |event| %>
+      <tr>
+        <td><%= link_to event.name, event %></td>
+        <td><%= event.date.strftime("%m/%d/%y") %></td>
+        <td><%= event.start_time.strftime("%I:%M %p") %></td>
+        <td><%= event.end_time.strftime("%I:%M %p") %></td>
+        <td><%= event.organization.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<%= link_to 'Edit', edit_user_path(@user), :class=>"btn waves-effect waves-light" %> |
 <%= link_to 'Back', users_path %>
