@@ -11,11 +11,11 @@ body::after {
     height: 100%;
     left:50%;
     transform:translateX(-50%);
-    background-image: "/app/assets/images/class.png";
+    background-image: url(<%= asset_path 'class.png' %>);
     background-size: cover !important;
     background-repeat: no-repeat;
     z-index: -100;
-    opacity: 0.3
+    opacity: 0.2
 }
 
 body, html {
@@ -25,23 +25,22 @@ body, html {
 .row {
   padding-top: 30% !important;
 }
+
 </style>
 
 <div>
   <div class="row">  
     <h1 class="center-text">Let's Make CMU <span class="accent-color">Livelier</span></h1>  
     
-      <div class="card">
-        <div class="card-content">
-          <p>The Pittsburgh Animal Treatment Services are a 
-            group of vets dedicated to providing you and 
-            your pets with the finest care in the Pittsburgh 
-            area.  The links below will tell you more about 
-            our services and in the near future we will be 
-            expanding this site so that customers like 
-            yourself can directly access records for your pets.
-          </p>
+      <div class="center-text">
+        <!-- <div class="card-content"> -->
+          <h5><b>Imagine a world where it was actually possible to reserve a space.</b></h5>
+          <p>Log In or Sign Up below to join the movement</p>
         </div>
+      <!-- </div> -->
+      <div class="center-text">
+        <a class="waves-effect waves-accent waves-light btn accent-color-bg" href="/login">Log In</a>
+        <a class="waves-effect waves-default waves-light btn primary-color-bg" href="/signup">Register</a>        
       </div>
     </div>
   </div>

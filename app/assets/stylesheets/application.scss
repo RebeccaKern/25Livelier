@@ -9,8 +9,36 @@ $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
 @import "materialize";
 
+.dark {
+  color: $primary-color-dark !important;
+}
+
 .accent-color {
   color: $accent-color;
+}
+
+.accent-color-bg {
+  background-color: $accent-color;
+}
+
+.primary-color-bg {
+  background-color: $primary-color;
+}
+
+.waves-effect.waves-accent .waves-ripple {
+ /* The alpha value allows the text and background color
+ of the button to still show through. */
+  background-color: $accent-color;
+}
+
+.waves-effect.waves-default .waves-ripple {
+ /* The alpha value allows the text and background color
+ of the button to still show through. */
+  background-color: $primary-color;
+}
+
+.btn:hover {
+  background-color:inherit;
 }
 
 .bg-img
