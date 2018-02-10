@@ -11,7 +11,13 @@ namespace :db do
     Rake::Task['db:test:prepare'].invoke
     Rake::Task['db:seed'].invoke
 
-    # Step 1: Create admin account
+    # Step 1: Create general account
+    matt = User.new
+    matt.andrew_id = "mjkern"
+    matt.password = "secret"
+    matt.password_confirmation = "secret"
+    matt.role = "general"
+    matt.save!
     # admin = User.new
     # admin.andrew_id = "rkern"
     # admin.password = "secret"

@@ -7,6 +7,10 @@ class Ability
     if user.role? :admin
         can :manage, :all
     elsif user.role? :manager
+        can :read, Building
+        can :read, Room
+        can :read, Event
+
         can :create, Event
         #Event do |event|
         #     puts "test"
@@ -17,6 +21,16 @@ class Ability
         can :destroy, Event do |event|  
           event.user_id == user.id
         end
+
+        can :read, User do |user|
+          user.id == user.id
+        end 
+
+        can :update, User do |user|
+          user.id == user.id
+        end 
+
+
     elsif user.role? :general
         can :read, Building
         can :read, Room
