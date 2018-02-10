@@ -38,21 +38,25 @@ class User < ApplicationRecord
   private
 
   def set_params_from_andrew
-    json = JSON.parse(open("https://apis.scottylabs.org/directory/v1/andrewID/#{self.andrew_id}").read)
-    if json["affiliation"] == "Alumni"
-      errors.add(:user, "is an alumni and should not have the ability to create an account.")
-    end
-    self.first_name = json["first_name"]
-    self.last_name = json["last_name"]
-    if json["affiliation"] == "Faculty" || json["affiliation"] == "Staff"
-      self.role = "manager"
-      #@o = Organization.where(:name => "admin_privileges")
-      #puts User.all.size
-      Leadership.create(user_id: User.all.size, organization_id: 1)
-    end
-    puts self.role
-    if self.role == "" || self.role.nil?
-      self.role = "general"
+    begin
+      json = JSON.parse(open("https://apis.scottylabs.org/directory/v1/andrewID/#{self.andrew_id}").read)
+      if json["affiliation"] == "Alumni"
+        errors.add(:user, "is an alumni and should not have the ability to create an account.")
+      end
+      self.first_name = json["first_name"]
+      self.last_name = json["last_name"]
+      if json["affiliation"] == "Faculty" || json["affiliation"] == "Staff"
+        self.role = "manager"
+        #@o = Organization.where(:name => "admin_privileges")
+        #puts User.all.size
+        Leadership.create(user_id: User.all.size, organization_id: 1)
+      end
+      puts self.role
+      if self.role == "" || self.role.nil?
+        self.role = "general"
+      end
+    rescue
+      errors.add(:user, "does not currently have an andrew_id at CMU")
     end
   end
 
