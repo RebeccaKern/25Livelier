@@ -25,6 +25,8 @@ namespace :db do
     becca.password_confirmation = "secret"
     becca.role = "admin"
     becca.save!
+
+    Leadership.create(user_id: User.last.id, organization_id: 1)
     # admin = User.new
     # admin.andrew_id = "rkern"
     # admin.password = "secret"
