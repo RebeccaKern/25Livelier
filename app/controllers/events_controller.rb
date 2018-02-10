@@ -35,7 +35,6 @@ class EventsController < ApplicationController
         ConfirmMailer.new_event_msg(@event).deliver
         format.html {redirect_to @event, notice: 'Event was successfully created.'}
         format.json {render :show, status: :created, location: @event}
-        confirm
       else
         format.html {render :new}
         format.json {render json: @event.errors, status: :unprocessable_entity}
