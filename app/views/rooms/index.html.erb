@@ -18,7 +18,9 @@
         <td><%= link_to room.full_name, room %></td>
         <td><%= room.max_capacity %></td>
         <td><%= room.room_type %></td>
-        <td><%= link_to 'Edit', edit_room_path(room), :class=>"btn waves-effect waves-light" %> </td>
+        <% if current_user.role?(:admin) %>
+          <td><%= link_to 'Edit', edit_room_path(room), :class=>"btn waves-effect waves-light" %> </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
