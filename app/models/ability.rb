@@ -34,11 +34,20 @@ class Ability
 
 
     elsif user.role? :general
+        can :create, User do |user|
+          user.id == user.id
+        end
         can :read, Building
         can :read, Room
         can :read, Event
         can :read, Organization
-    end
+    else
+      can :create, User do |user|
+          user.id == user.id
+        end
+     end
+
+
   end
 
 end
