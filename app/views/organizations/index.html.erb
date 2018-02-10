@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Description</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -14,11 +13,10 @@
   <tbody>
     <% @organizations.each do |organization| %>
       <tr>
-        <td><%= organization.name %></td>
-        <td><%= organization.description %></td>
-        <td><%= link_to 'Show', organization %></td>
-        <td><%= link_to 'Edit', edit_organization_path(organization) %></td>
-        <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to organization.name, organization %></td>
+        <% if current_user.role?(:admin)%>
+        <td><%= link_to 'Edit', edit_organization_path(organization), :class=>"btn waves-effect waves-light" %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

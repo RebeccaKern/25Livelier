@@ -6,10 +6,12 @@ class Ability
 
     if user.role? :admin
         can :manage, :all
+
     elsif user.role? :manager
-        can :read, Building
+        can :index, Building
         can :read, Room
         can :read, Event
+        can :index, Organization
 
         can :create, Event
         #Event do |event|
@@ -35,6 +37,7 @@ class Ability
         can :read, Building
         can :read, Room
         can :read, Event
+        can :read, Organization
     end
   end
 

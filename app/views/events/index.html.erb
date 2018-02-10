@@ -22,7 +22,9 @@
         <td><%= event.start_time.strftime('%I:%M %p') %></td>
         <td><%= event.end_time.strftime('%I:%M %p') %></td>
         <td><%= link_to event.organization.name, organization_path(event.organization)%></td>
+        <% if current_user.role?(:admin)%>
         <td><%= link_to 'Edit', edit_event_path(event), :class=>"btn waves-effect waves-light" %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
@@ -30,10 +32,15 @@
 
 <br>
 
-<span class="paginate">
+<span class="paginate center-align">
   <%= will_paginate @event, :previous_label => "Previous&nbsp;", :next_label => "&nbsp;Next", :param_name => 'events' %>
 </span>
 
-<%= link_to 'New Event', new_event_path %>
+<span class="center-align">
+<% if current_user.role?(:admin)%>
+    <%= link_to 'New Event', new_event_path, :class=>"btn waves-effect waves-light center-align" %>
+<% end %>
+</span>
+
 
 
