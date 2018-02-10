@@ -12,4 +12,14 @@
 //
 //= require rails-ujs
 //= require turbolinks
+//= require jquery
+//= require materialize
 //= require_tree .
+
+$(document).ready(function(){
+  $(".dropdown-button").dropdown({
+    belowOrigin: true,
+    hover: true
+  });
+  $('.parallax').parallax();
+})

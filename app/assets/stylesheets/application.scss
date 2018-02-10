@@ -8,3 +8,19 @@ $primary-text-color:   #212121;
 $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
 @import "materialize";
+
+.accent-color {
+  color: $accent-color;
+}
+
+.bg-img
+{
+    width: 100%;
+    background: #FFF url(https://www.cmu.edu/cheme/images/headers/cit_cheme_pse_2014_056_a.jpg) no-repeat center top;
+    margin: 0 auto;
+    height:100%;
+}
+
+.center-text {
+  text-align: center;
+}
