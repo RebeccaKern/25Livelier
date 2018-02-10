@@ -9,6 +9,7 @@ namespace :db do
     #Invoke rake db:migrate
     Rake::Task['db:migrate'].invoke
     Rake::Task['db:test:prepare'].invoke
+    Rake::Task['db:seed'].invoke
 
     # Step 1: Create admin account
     # admin = User.new

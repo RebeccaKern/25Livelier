@@ -51,7 +51,7 @@ class User < ApplicationRecord
   end
 
   def user_is_not_a_duplicate
-    if self.already_exists?
+    if self.already_exists? 
       errors.add(:andrew_id, "already exists for a current user")
     end
   end
