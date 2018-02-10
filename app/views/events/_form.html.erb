@@ -4,6 +4,45 @@ var filter = function(k, v){
   reset_table();
 }
 
+var show_building_rooms = function(building_id){
+  var new_form_elem
+  filter_dict['room_id'] = null;
+  switch (building_id){
+    case '1':
+      new_form_elem = 'for_bh';
+      filter_dict['building'] = "Baker Hall";
+      break;
+    case '2':
+      new_form_elem = 'for_ph';
+      filter_dict['building'] = "Porter Hall";
+      break;
+    case '3':
+      new_form_elem = 'for_weh';
+      filter_dict['building'] = "Wean Hall";
+      break;
+    default:
+      new_form_elem = 'for_dh';
+      filter_dict['building'] = "Doherty Hall";
+      break;
+  }
+  all_ids = ['for_bh', 'for_ph', 'for_weh', 'for_dh'];
+  for (var i = 0; i < 4; i++){
+    var bldg = all_ids[i];
+    if (bldg == new_form_elem){
+      document.getElementById(bldg).style.display = 'block';
+    } else {
+      document.getElementById(bldg).style.display = 'none';
+    }
+  }
+  reset_table();
+}
+
+var update_room = function(room){
+  filter_dict['room_id'] = room;
+  console.log(filter_dict);
+  reset_table();
+}
+
 var filter_all_rooms = function(all_rooms){
   if (filter_dict.event_number_attending){
     console.log(filter_dict.event_number_attending);
@@ -11,18 +50,23 @@ var filter_all_rooms = function(all_rooms){
     console.log(all_rooms);
   }
   if (filter_dict.building){
-    all_rooms = all_rooms.filter(room => room.building == filter_dict.building);
+    all_rooms = all_rooms.filter(room => room.building.name == filter_dict.building);
   }
-  if (filter_dict.building && filter_dict.room){
-    all_rooms = all_rooms.filter(room => (room.location_address == filter_dict.room) && (room.building == filter_dict.building));
+  if (filter_dict.building && filter_dict.room_id){
+    console.log("both");
+    all_rooms = all_rooms.filter(room => (room.id == filter_dict.room_id) && (room.building.name == filter_dict.building));
   }
   return all_rooms;
 }
 
 var reset_table = function(){
   var room_table = document.getElementById('room_table');
-  var new_table = "<div id='room_table'><table class='striped'><thead><tr><th>Building</th><th>Room</th><th>Capacity</th></tr></th><tbody>";
-  var all_rooms = <%= raw Room.all.map{|a| a.to_json(:include => :building)} %>;
+  var header_string = "<h4>Available Rooms</h4>";
+  if (filter_dict['date']){
+    header_string = "<h4>Available Rooms on " + filter_dict['date'] +"</h4>";
+  }
+  var new_table = "<div id='room_table'>"+header_string+"<table class='striped highlight'><thead><tr><th>Building</th><th>Room</th><th>Capacity</th></tr></th><tbody>";
+  var all_rooms = <%= raw Room.all.map{|a| a.to_json(:include => [:building], :methods => :events_for_room)} %>;
   all_rooms = all_rooms.map(room => JSON.parse(room));
   all_rooms = filter_all_rooms(all_rooms);
   for (var elem = 0; elem < all_rooms.length; elem++){
@@ -51,52 +95,92 @@ var reset_table = function(){
 
     <%= form.hidden_field :user_id, value: current_user.id %>
 
-    <div class="field">
-      <%= form.label 'Building' %>
-      <%= form.collection_select :building, Building.alphabetical, :id, :name, {}, {:onChange=>"javascript: filter('event_number_attending', $('#event_number_attending').val());"} %>
+    <div class="input-field">
+      <select id="building_select" onchange="javascript: show_building_rooms($('#building_select').val())">
+        <option value="" disabled selected>Choose a Building</option>
+      <% for building in Building.all %>
+        <option value='<%=building.id%>'><%= building.name %></option>
+      <% end %>
+      </select>
+      <label>Choose a Building</label>
     </div>
 
-    <div class="field">
-      <%= form.label :room_id %>
-      <%= form.collection_select :room_id, Room.alphabetical, :id, :location_address, {}, {:onChange=>"javascript: filter('event_number_attending', $('#event_number_attending').val());"} %>
+    <div id='for_dh' class="input-field hidden">
+      <select id='dh_select' onchange="javascript: update_room($('#dh_select').val())">
+        <option value="" disabled selected>Choose a Room</option>
+      <% for room in Room.for_dh %>
+        <option value="<%=room.id%>"><%= room.building.name + " " + room.location_address %></option>
+      <% end %>
+      </select>
+      <label>Choose a Room</label>
     </div>
 
-    <div class="field">
+    <div id='for_ph' class="input-field hidden">
+      <select id='ph_select' onchange="javascript: update_room($('#ph_select').val())">
+        <option value="" disabled selected>Choose a Room</option>
+      <% for room in Room.for_ph %>
+        <option value='<%=room.id%>'><%= room.building.name + " " + room.location_address %></option>
+      <% end %>
+      </select>
+      <label>Choose a Room</label>
+    </div>
+
+    <div id='for_bh' class="input-field hidden">
+      <select id='bh_select' onchange="javascript: update_room($('#bh_select').val())">
+        <option value="" disabled selected>Choose a Room</option>
+      <% for room in Room.for_bh %>
+        <option value='<%=room.id%>'><%= room.building.name + " " + room.location_address %></option>
+      <% end %>
+      </select>
+      <label>Choose a Room</label>
+    </div>
+
+    <div id='for_weh' class="input-field hidden">
+      <select id='weh_select' onchange="javascript: update_room($('#weh_select').val())">
+        <option value="" disabled selected>Choose a Room</option>
+      <% for room in Room.for_weh %>
+        <option value='<%=room.id%>'><%= room.building.name + " " + room.location_address %></option>
+      <% end %>
+      </select>
+      <label>Choose a Room</label>
+    </div>
+
+    <div class="input-field">
       <%= form.label 'Event Name' %>
       <%= form.text_field :name, id: :event_name, :onkeyup=>"javascript: filter('event_name', $('#event_name').val());" %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :number_attending %>
       <%= form.number_field :number_attending, id: :event_number_attending, :onkeyup=>"javascript: filter('event_number_attending', $('#event_number_attending').val());" %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :date %>
-      <%= form.date_field :date, id: :event_date %>
+      <%= form.date_field :date, id: :event_date, :onChange=>"javascript: filter('date', $('#event_date').val());" %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :start_time %>
       <%= form.time_field :start_time, id: :event_start_time %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :end_time %>
       <%= form.time_field :end_time, id: :event_end_time %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :description %>
       <%= form.text_field :description, id: :event_description %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :group_tag %>
       <%= form.number_field :group_tag, id: :event_group_tag %>
     </div>
 
-    <div class="field">
+    <div class="input-field">
       <%= form.label :organization_id %>
       <%= form.text_field :organization_id, id: :event_organization_id %>
     </div>
@@ -108,26 +192,26 @@ var reset_table = function(){
   </div>
 
   <div class="col s5">
-    <h4>Available Rooms</h4>
     <div id="room_table">
-      <table class='striped'>
-        <thead>
+      <h4>Available Rooms</h4>
+        <table class='striped highlight'>
+          <thead>
+            <tr>
+              <th>Building</th>
+              <th>Room</th>
+              <th>Capacity</th>
+            </tr>
+          </thead>
+        <tbody>
+        <% for room in Room.all %>
           <tr>
-            <th>Building</th>
-            <th>Room</th>
-            <th>Capacity</th>
+            <td><%= room.building.name %></td>
+            <td><%= room.location_address %></td>
+            <td><%= room.max_capacity %></td>
           </tr>
-        </thead>
-      <tbody>
-      <% for room in Room.all %>
-        <tr>
-          <td><%= room.building.name %></td>
-          <td><%= room.location_address %></td>
-          <td><%= room.max_capacity %></td>
-        </tr>
-      <% end %>        
-      </tbody>
-    </table>
+        <% end %>        
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

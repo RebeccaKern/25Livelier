@@ -24,4 +24,5 @@ $(document).ready(function(){
     hover: true
   });
   $('.parallax').parallax();
+  $('select').material_select();
 });

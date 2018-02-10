@@ -9,6 +9,12 @@ $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
 @import "materialize";
 
+
+.hidden{
+  display: none;
+}
+
+
 .dark {
   color: $primary-color-dark !important;
 }
